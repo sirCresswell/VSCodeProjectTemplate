@@ -14,6 +14,24 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# ---------------------------------------------------------
+# Git tag–based versioning
+# ---------------------------------------------------------
+find_package(Git QUIET)
+
+if(GIT_FOUND)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} describe --tags --dirty --always
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        OUTPUT_VARIABLE GIT_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+else()
+    set(GIT_VERSION "0.0.0-unknown")
+endif()
+
+message(STATUS "Detected version: ${GIT_VERSION}")
+
 # Allow user to choose static/shared
 option(${PROJECT_NAME}_BUILD_SHARED "Build ${PROJECT_NAME} as a shared library" ON)
 
@@ -87,6 +105,11 @@ add_library(${PROJECT_NAME} SHARED
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_BUILD_DLL)
 
+# ---------------------------------------------------------
+# Install rules
+# ---------------------------------------------------------
+include(GNUInstallDirs)
+
 install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -102,14 +125,23 @@ install(EXPORT ${PROJECT_NAME}Targets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
+# ---------------------------------------------------------
+# Version header
+# ---------------------------------------------------------
+set(GIT_VERSION "${GIT_VERSION}")
+
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/generated/${PROJECT_NAME}_version.h
     @ONLY
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    ${CMAKE_CURRENT_BINARY_DIR}/generated
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated>
 )
 
 # ---------------------------------------------------------
