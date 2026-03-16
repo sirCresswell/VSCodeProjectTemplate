@@ -1,4 +1,4 @@
-# BrawUI Project Template
+# Braw Project Template
 
 This repository is a **GitHub Template Repository** for creating new C++ projects using:
 
