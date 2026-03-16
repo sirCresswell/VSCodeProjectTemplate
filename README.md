@@ -24,3 +24,6 @@ Install msys2 then
   mingw-w64-ucrt-x86_64-ninja \
   mingw-w64-ucrt-x86_64-toolchain
  - C:\msys64\ucrt64\bin add to path
+
+
+Then open the checkout folder with visual code and save the workspace.
