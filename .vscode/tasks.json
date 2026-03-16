@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "cmake --build --preset ${command:cmake.activeBuildPresetName}",
+      "group": "build"
+    },
+    {
+      "label": "Clean",
+      "type": "shell",
+      "command": "cmake --build --preset ${command:cmake.activeBuildPresetName} --target clean"
+    },
+    {
+      "label": "Rebuild",
+      "type": "shell",
+      "command": "cmake --build --preset ${command:cmake.activeBuildPresetName} --target clean && cmake --build --preset ${command:cmake.activeBuildPresetName}"
+    }
+  ]
+}
