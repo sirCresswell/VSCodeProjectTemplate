@@ -12,3 +12,15 @@ This repository is a **GitHub Template Repository** for creating new C++ project
 - Project generator script
 
 Click **Use this template → Create new repository** to start a new project.
+
+Before opening the project please
+
+Install msys2 then
+ - pacman -Syu
+ - pacman -S \
+  mingw-w64-ucrt-x86_64-clang \
+  mingw-w64-ucrt-x86_64-gdb \
+  mingw-w64-ucrt-x86_64-cmake \
+  mingw-w64-ucrt-x86_64-ninja \
+  mingw-w64-ucrt-x86_64-toolchain
+ - C:\msys64\ucrt64\bin add to path
